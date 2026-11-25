@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yahoo!</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: #000; overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; font-family: Arial Black, Helvetica, sans-serif; cursor: pointer; user-select: none; }
+  #word { color: #fff; font-size: 12vw; letter-spacing: 0.05em; text-shadow: 0 0 40px rgba(255,255,255,0.4); transition: opacity 0.3s; }
+  #word.gone { opacity: 0; pointer-events: none; }
+  #hint { position: fixed; bottom: 8vh; color: #444; font-size: 14px; font-family: Arial, sans-serif; letter-spacing: 0.3em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+  <div id="word">Yahoo!</div>
+  <div id="hint">tap anywhere</div>
+<script>
+  const word = document.getElementById('word');
+  const hint = document.getElementById('hint);
+  const DAY_KEY = 'yahoo_day_' + new Date().toISOString().slice(0,10);
+  const TOTAL_SEC = 24 * 60 * 60;
+
+  function hash(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+    return Math.abs(h);
+  }
+  const offsetSec = hash(DAY_KEY) % TOTAL_SEC;
+  const now = new Date();
+  const secsIntoDay = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
+  let delay = (offsetSec - secsIntoDay + TOTAL_SEC) % TOTAL_SEC;
+  const fired = localStorage.getItem(DAY_KEY);
+  if (fired) {
+    word.classList.remove('gone);
+  } else {
+    word.classList.add('gone);
+    setTimeout(() => {
+      word.classList.remove('gone);
+      localStorage.setItem(DAY_KEY, '1);
+    }, delay * 1000);
+  }
+
+  function dismiss() {
+    word.classList.add('gone);
+    hint.textContent = 'back tomorrow;
+  }
+  document.body.addEventListener('click', dismiss);
+  document.body.addEventListener('touchstart', dismiss);
+</script>
+</body>
+</html>

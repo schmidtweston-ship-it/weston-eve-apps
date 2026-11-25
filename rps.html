@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rock Paper Scissors</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: #000; overflow: hidden; font-family: Arial Black, Helvetica, sans-serif; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; user-select: none; }
+  #title { font-size: 6vw; letter-spacing: 0.1em; margin-bottom: 4vh; color: #ff2d95; text-shadow: 0 0 30px rgba(255,45,149,0.6); }
+  #score { font-size: 4vw; letter-spacing: 0.3em; margin-bottom: 6vh; color: #888; }
+  #score span { color: #fff; }
+  #choice { font-size: 18vw; margin-bottom: 4vh; transition: transform 0.15s; }
+  #choice.shake { animation: shake 0.4s; }
+  @keyframes shake { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-8deg)} 75%{transform:rotate(8deg)} }
+  #result { font-size: 5vw; letter-spacing: 0.15em; min-height: 8vh; color: #ffd700; text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+  #buttons { display: flex; gap: 4vw; }
+  button { background: #111; border: 2px solid #333; color: #fff; font-size: 8vw; padding: 2vh 4vw; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+  button:hover { border-color: #ff2d95; box-shadow: 0 0 20px rgba(255,45,149,0.4); }
+  button:active { transform: scale(0.95); }
+  #wins { position: fixed; bottom: 6vh; font-size: 3vw; color: #444; letter-spacing: 0.2em; }
+</style>
+</head>
+<body>
+  <div id="title">ROCK PAPER SCISSORS</div>
+  <div id="score">YOU <span id="youScore">0</span> — <span id="eveScore">0</span> EVE</div>
+  <div id="choice">✊</div>
+  <div id="result"></div>
+  <div id="buttons">
+    <button onclick="play('rock')">✊</button>
+    <button onclick="play('paper')">✋</button>
+    <button onclick="play('scissors')">✌️</button>
+  </div>
+  <div id="wins">undefeated since always</div>
+<script>
+  const youScoreEl = document.getElementById('youScore);
+  const eveScoreEl = document.getElementById('eveScore);
+  const choiceEl = document.getElementById('choice);
+  const resultEl = document.getElementById('result);
+  let you = 0, eve = 0;
+  const icons = { rock: '✊', paper: '✋', scissors: '✌️' };
+  const beats = { rock: 'scissors', scissors: 'paper', paper: 'rock' };
+
+  function play(pick) {
+    choiceEl.classList.add('shake);
+    setTimeout(() => choiceEl.classList.remove('shake'), 400);
+    const hers = ['rock','paper','scissors'][Math.floor(Math.random()*3)];
+    choiceEl.textContent = icons[hers];
+    if (pick === hers) {
+      resultEl.textContent = 'TIE';
+    } else if (beats[pick] === hers) {
+      you++; youScoreEl.textContent = you;
+      resultEl.textContent = 'YOU WIN';
+    } else {
+      eve++; eveScoreEl.textContent = eve;
+      resultEl.textContent = 'EVE WINS';
+    }
+  }
+</script>
+</body>
+</html>
